@@ -1649,7 +1649,16 @@ const PROJETOS = {
     // Fonte: Drive "DIRETORIA DE PROJETO 2026-2027 > PROJETOS > dados projetos > Indicadores Plano de Trabalho > Sda 2"
     // (Plano de trabalho exemplo atualizado SDA II Araripe e Salitre.xlsx). Valor a receber: 337 x R$ 6.576,03.
     // Custo de execução previsto R$ 2.180.430,44; diferença (R$ 35.691,67) = superávit previsto no plano.
-    periodoIni:'17/04/2021', periodoFim:'17/04/2026', // vigência conforme o Sig Cisternas (contrato Inativo em 25/11/2026)
+    // Vigência original: termina em 30/06/2025 (o 1º aditivo prorroga "a partir de 01/07/2025").
+    // Data de início do contrato a confirmar com o documento do Contrato nº 052/2025 (pode ser lançada na Visão Geral).
+    periodoFim:'30/06/2025',
+    // Aditivos de prazo (Drive: DIRETORIA DE PROJETO 2026-2027 > ... > aditivos sda2). MODELO para os demais projetos:
+    // { nome, ini, fim, doc } — doc = link do PDF no Drive da ACB (só abre para quem tem acesso à pasta).
+    prazosAditivos:[
+      { nome:'1º Termo Aditivo', ini:'01/07/2025', fim:'30/12/2025', doc:'https://drive.google.com/file/d/1QsqX_7T4Ma-gN_LpSAW_7dZZdcejCCha/view' },
+      { nome:'2º Termo Aditivo', ini:'31/12/2025', fim:'30/06/2026', doc:'https://drive.google.com/file/d/1cDS_VWTKRp0sKrXSpgonCF8J75LCTz0b/view' },
+      { nome:'3º Termo Aditivo', ini:'01/07/2026', fim:'31/12/2026', doc:'https://drive.google.com/file/d/1-m7F6HACH08qDfBadO5ClZljovbheRps/view' },
+    ],
     indicadoresSig:[
       { k:'familiasCadastradas', lbl:'Famílias cadastradas no Sig', meta:337 },
       { k:'cisternasConstruidas', lbl:'Cisternas construídas', meta:337 },
@@ -1973,6 +1982,7 @@ function renderProjeto(id){
     const tit = v.status === 'vencido' ? 'Período vencido' : v.status === 'vigente' ? 'Período em vigência' : 'Período futuro';
     tagArr.push(`<span class="${cls}" title="${tit}">📅 <b>${v.nome}</b> ${v.ini||'—'} → ${v.fim||'—'}</span>`);
   });
+  if (!p.social && !prazosAditivos(id).length) tagArr.push(`<span class="proj-tag" title="Nenhum termo aditivo de prazo">📄 Sem aditivos</span>`);
   const tags = tagArr.join('');
 
   const vgAtual = valorGlobalAtual(id);
@@ -2394,8 +2404,8 @@ function editPrazo(id, i, campo, val){ _acomp[id].prazos[i][campo] = String(val)
 function renderPrazosAditivos(id, edit){
   const fixos = !!PROJETOS[id].prazosAditivos, lista = prazosAditivos(id);
   if (!(edit && !fixos)) {
-    if (!lista.length) return '<span style="color:var(--text3)">nenhum</span>';
-    return lista.map((a,i) => `${a.nome || ((i+1)+'º Aditivo')}: ${a.ini||'—'} a ${a.fim||'—'}`).join('<br>');
+    if (!lista.length) return '<span style="color:var(--text3)">Sem aditivos</span>';
+    return lista.map((a,i) => `${a.nome || ((i+1)+'º Aditivo')}: ${a.ini||'—'} a ${a.fim||'—'}${a.doc ? ` · <a href="${a.doc}" target="_blank" rel="noopener">📄 ver documento</a>` : ''}`).join('<br>');
   }
   const f = (i,c,v,ph,w) => `<input class="acomp-date" style="width:${w}" placeholder="${ph}" value="${v||''}" onchange="editPrazo('${id}',${i},'${c}',this.value)">`;
   const linhas = lista.map((a,i) => `<div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:6px">

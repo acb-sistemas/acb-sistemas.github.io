@@ -1048,6 +1048,7 @@ tbody tr:last-child td{border-bottom:none}
         <div class="form-group"><label>Perfil *</label>
           <select id="usr-perfil">
             <option value="tecnico">Técnico</option>
+            <option value="geral">Conta Geral (diretoria: vê tudo e valida aditivos)</option>
             <option value="financeiro">Financeiro</option>
             <option value="coordenador">Coordenador</option>
             <option value="admin">Administrador</option>
@@ -1950,7 +1951,7 @@ function confirmarSenhaProj(){
   const err = document.getElementById('msp-err');
   const m = Object.values(MASTER).find(x => x.senha === s);
   if (m) {  // senha master → libera todos
-    _masterOn = true;
+    _masterOn = true; _masterNome = m.nome + ' (' + m.papel + ')';
     document.getElementById('sidebar-user-name').textContent = m.nome;
     document.getElementById('sidebar-user-role').textContent = m.papel + ' • Acesso Master';
     montarNavProjetos(Object.keys(PROJETOS));
@@ -1993,7 +1994,8 @@ function renderProjeto(id){
     const tit = v.status === 'vencido' ? 'Período vencido' : v.status === 'vigente' ? 'Período em vigência' : 'Período futuro';
     tagArr.push(`<span class="${cls}" title="${tit}">📅 <b>${v.nome}</b> ${v.ini||'—'} → ${v.fim||'—'}</span>`);
   });
-  if (p.pastaDrive) tagArr.push(`<a class="proj-tag" href="${p.pastaDrive}" target="_blank" rel="noopener" style="text-decoration:none">📁 Pasta no Drive</a>`);
+  if (pastaDriveDe(id)) tagArr.push(`<a class="proj-tag" href="${pastaDriveDe(id)}" target="_blank" rel="noopener" style="text-decoration:none">📁 Pasta no Drive</a>`);
+  if (!p.social && prazosPendentes(id).length) tagArr.push(`<span class="proj-tag" style="background:#fef3c7;border-color:#f59e0b;color:#92400e" title="Aditivo lançado, aguardando o termo ou a validação">⏳ ${prazosPendentes(id).length} aditivo(s) aguardando validação</span>`);
   if (!p.social && !prazosAditivos(id).length) tagArr.push(`<span class="proj-tag" title="Nenhum termo aditivo de prazo">📄 Sem aditivos</span>`);
   const tags = tagArr.join('');
 
@@ -2072,7 +2074,7 @@ function renderProjeto(id){
   idRows.push(`<tr><td style="font-weight:700">Período do contrato</td><td>${edit && !p.periodoIni ? inp('periodoIni',perIni,'Início',130)+' a '+inp('periodoFim',perFim,'Fim',130) : (perIni||perFim ? `${perIni||'—'} a ${perFim||'—'}` : '<span style="color:var(--text3)">a definir</span>')}</td></tr>`);
   idRows.push(`<tr><td style="font-weight:700">Aditivos de prazo</td><td>${renderPrazosAditivos(id, edit)}</td></tr>`);
   if (p.outrosAditivos && p.outrosAditivos.length) idRows.push(`<tr><td style="font-weight:700">Outros aditivos</td><td>${p.outrosAditivos.map(a => `<b>${a.nome}</b>: ${a.desc}`).join('<br>')}</td></tr>`);
-  if (!p.social) idRows.push(`<tr><td style="font-weight:700">Pasta do projeto no Drive</td><td>${p.pastaDrive ? `<a href="${p.pastaDrive}" target="_blank" rel="noopener">📁 Abrir pasta no Drive</a> <span style="color:var(--text3);font-size:12px">(só abre para quem tem acesso)</span>` : '<span style="color:var(--text3)">a definir</span>'}</td></tr>`);
+  { const pd = pastaDriveDe(id); idRows.push(`<tr><td style="font-weight:700">Pasta no Drive</td><td>${pd ? `<a href="${pd}" target="_blank" rel="noopener">📁 Abrir pasta no Drive</a> <span style="color:var(--text3);font-size:12px">(só abre para quem tem acesso)</span>` : '<span style="color:var(--text3)">a definir</span>'}</td></tr>`); }
   const iniAtiv = info.inicioAtividades || '', fimAtiv = info.fimAtividades || '';
   idRows.push(`<tr><td style="font-weight:700">Início das atividades</td><td>${edit ? inp('inicioAtividades',iniAtiv,'dd/mm/aaaa',130) + ' <span style="font-size:10px;color:var(--text3)">quando começou de fato</span>' : (iniAtiv || '<span style="color:var(--text3)">a definir</span>')}</td></tr>`);
   idRows.push(`<tr><td style="font-weight:700">Término das atividades</td><td>${edit ? inp('fimAtividades',fimAtiv,'dd/mm/aaaa',130) + ' <span style="font-size:10px;color:var(--text3)">prazo real (ex.: 6 meses após o início)</span>' : (fimAtiv || '<span style="color:var(--text3)">a definir</span>')}</td></tr>`);
@@ -2239,6 +2241,8 @@ async function carregarAcomp(id){
   _acomp[id].info = _acomp[id].info || {};
   _acomp[id].cronograma = _acomp[id].cronograma || [];
   _acomp[id].prazos = _acomp[id].prazos || [];
+  _acomp[id].prazos.forEach((a,i) => { if (!a.k) a.k = 'ad_antigo_' + i; }); // chave para a validação
+  await carregarValidacoes(id);
   _acomp[id].metasPerc = _acomp[id].metasPerc || {};
   _acomp[id].aditivos = _acomp[id].aditivos || {};
   _acomp[id].obsMetas = _acomp[id].obsMetas || {};
@@ -2392,8 +2396,31 @@ function renderSocialCard(id, edit){
 }
 
 // ─── Vigência e aditivos de prazo ───
-// Aditivos ficam no código (p.prazosAditivos) ou são lançados no portal (_acomp[id].prazos), pelo responsável.
-function prazosAditivos(id){ return PROJETOS[id].prazosAditivos || (_acomp[id] && _acomp[id].prazos) || []; }
+// Aditivos ficam no código (p.prazosAditivos, já conferidos) ou são lançados no portal pelo responsável
+// (_acomp[id].prazos) com o link do termo em PDF guardado na pasta RESTRITA do Drive do projeto. Um aditivo
+// lançado só entra no cabeçalho depois que a Conta Geral confere o termo e valida. A validação fica no mesmo
+// documento 'acompanhamento/{id}', campo 'validacaoAditivos' (funciona com as regras atuais do Firebase).
+// Pastas do Drive da ACB (compartilhamento RESTRITO — conferido em 25/11/2026). Um projeto pode ter a sua em p.pastaDrive.
+const PASTA_DRIVE_PROJETOS = 'https://drive.google.com/drive/folders/1bzooejzomP9yvjs904ivU2ngFe0q17oJ'; // DIRETORIA DE PROJETO 2026-2027 > PROJETOS
+const PASTA_DRIVE_SOCIAL = 'https://drive.google.com/drive/folders/1OKFIZZ5cKfRcg-12h-wR2QsLFb4xHALD';   // Assistência Social
+function pastaDriveDe(id){ const p = PROJETOS[id]; return p.pastaDrive || (p.social ? PASTA_DRIVE_SOCIAL : PASTA_DRIVE_PROJETOS); }
+let _validAd = {};
+async function carregarValidacoes(id){
+  // Vem junto com o acompanhamento; tira de _acomp para o salvarAcomp nunca regravar uma cópia velha.
+  const a = _acomp[id] || {};
+  _validAd[id] = Object.assign({}, _validAd[id] || {}, a.validacaoAditivos || {});
+  delete a.validacaoAditivos;
+}
+// Quem valida: a Conta Geral (senha master: Ramon, Brígida, Ery) ou um admin logado por e-mail.
+let _masterNome = '';
+function ehAdminValidador(){ return _masterOn || (!!currentUser && ['admin','geral','coordenador'].includes(currentPerfil)); }
+function nomeValidador(){ return _masterNome || (currentUser && currentUser.email) || 'Conta Geral'; }
+function prazosLancados(id){ return (_acomp[id] && _acomp[id].prazos) || []; }
+function aditivoValidado(id, a){ return !!(a && a.k && _validAd[id] && _validAd[id][a.k]); }
+function prazosPendentes(id){ return prazosLancados(id).filter(a => !aditivoValidado(id, a)); }
+function prazosAditivos(id){ return (PROJETOS[id].prazosAditivos || []).concat(prazosLancados(id).filter(a => aditivoValidado(id, a))); }
+function linkDriveOk(u){ return /^https:\/\/(drive|docs)\.google\.com\//.test(String(u||'').trim()); }
+function linkTermo(a){ return a && a.arquivo && (a.arquivo.link || ''); }
 function dataOk(s){ return !!s && /^\d{2}\/\d{2}\/\d{4}$/.test(s); }
 function vigencias(id){
   const p = PROJETOS[id], inf = (_acomp[id] && _acomp[id].info) || {};
@@ -2416,16 +2443,73 @@ function addPrazo(id){ _acomp[id].prazos = _acomp[id].prazos || []; _acomp[id].p
 function delPrazo(id, i){ _acomp[id].prazos.splice(i,1); salvarAcomp(id); renderProjeto(id); }
 function editPrazo(id, i, campo, val){ _acomp[id].prazos[i][campo] = String(val).trim(); salvarAcomp(id); renderProjeto(id); }
 function renderPrazosAditivos(id, edit){
-  const fixos = !!PROJETOS[id].prazosAditivos, lista = prazosAditivos(id);
-  if (!(edit && !fixos)) {
-    if (!lista.length) return '<span style="color:var(--text3)">Sem aditivos</span>';
-    return lista.map((a,i) => `${a.nome || ((i+1)+'º Aditivo')}: ${a.ini||'—'} a ${a.fim||'—'}${a.doc ? ` · <a href="${a.doc}" target="_blank" rel="noopener">📄 ver documento</a>` : ''}`).join('<br>');
-  }
-  const f = (i,c,v,ph,w) => `<input class="acomp-date" style="width:${w}" placeholder="${ph}" value="${v||''}" onchange="editPrazo('${id}',${i},'${c}',this.value)">`;
-  const linhas = lista.map((a,i) => `<div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:6px">
-      ${f(i,'nome',a.nome,'Nº do aditivo','150px')} ${f(i,'ini',a.ini,'Início dd/mm/aaaa','130px')} a ${f(i,'fim',a.fim,'Fim dd/mm/aaaa','130px')}
-      <button class="btn btn-outline" style="padding:3px 9px" onclick="delPrazo('${id}',${i})" title="Remover">×</button></div>`).join('');
-  return `${linhas}<button class="btn btn-outline" style="padding:4px 10px;font-size:12px" onclick="addPrazo('${id}')">+ Adicionar aditivo de prazo</button>`;
+  const fixos = PROJETOS[id].prazosAditivos || [], lanc = prazosLancados(id), adm = ehAdminValidador();
+  const btn = (txt, on, cls) => ` <button class="btn ${cls||'btn-outline'}" style="padding:2px 8px;font-size:12px" onclick="${on}">${txt}</button>`;
+  const linhaFixo = a => `<div style="margin-bottom:6px">✅ ${asEsc(a.nome)}: ${asEsc(a.ini||'—')} a ${asEsc(a.fim||'—')}${a.doc ? ` · <a href="${a.doc}" target="_blank" rel="noopener">📄 ver documento</a>` : ''}</div>`;
+  const linhaLanc = (a, i) => {
+    const ok = aditivoValidado(id, a);
+    const st = ok ? `<span style="color:#15803d;font-weight:600" title="em ${asEsc((_validAd[id][a.k].em||'').slice(0,10))}">✅ validado por ${asEsc(_validAd[id][a.k].por||'')}</span>`
+      : a.arquivo ? '<span style="color:#b45309;font-weight:600">⏳ pendente de validação</span>'
+      : '<span style="color:#b91c1c;font-weight:600">⚠ falta anexar o termo aditivo</span>';
+    let acoes = '';
+    if (a.arquivo && (adm || edit)) acoes += btn('📄 ver termo', `abrirTermoAditivo('${id}',${i})`);
+    if (a.arquivo && !ok && adm) acoes += btn('✅ Validar', `validarAditivo('${id}',${i})`, 'btn-green');
+    if (!a.arquivo && edit) acoes += btn('📎 colar link do termo', `anexarTermo('${id}',${i})`);
+    if (edit && (!ok || adm)) acoes += btn('×', `delPrazo('${id}',${i})`);
+    const arq = '';
+    return `<div style="margin-bottom:6px">${asEsc(a.nome || 'Aditivo')}: ${asEsc(a.ini||'—')} a ${asEsc(a.fim||'—')} · ${st}${arq}${acoes}</div>`;
+  };
+  let html = fixos.map(linhaFixo).join('') + lanc.map(linhaLanc).join('');
+  if (!html) html = '<span style="color:var(--text3)">Sem aditivos</span>';
+  if (!edit) return html;
+  const n = fixos.length + lanc.length + 1;
+  return html + `<div style="margin-top:8px;padding:10px;border:1px dashed var(--border,#cbd5e1);border-radius:8px">
+    <div style="font-weight:700;font-size:12px;margin-bottom:6px">Lançar novo aditivo de prazo</div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center">
+      <input id="nad-nome-${id}" class="acomp-date" style="width:150px" placeholder="Nº do aditivo" value="${n}º Termo Aditivo">
+      <input id="nad-ini-${id}" class="acomp-date" style="width:130px" placeholder="Início dd/mm/aaaa"> a
+      <input id="nad-fim-${id}" class="acomp-date" style="width:130px" placeholder="Fim dd/mm/aaaa">
+    </div>
+    <div style="margin-top:8px;font-size:12px">Link do termo aditivo assinado (PDF, obrigatório). Coloque o PDF na <a href="${pastaDriveDe(id)}" target="_blank" rel="noopener">pasta do projeto no Drive</a> e cole aqui o link do arquivo:<br><input id="nad-link-${id}" class="acomp-date" style="width:100%;max-width:460px" placeholder="https://drive.google.com/file/d/..."></div>
+    <button class="btn btn-green" style="margin-top:8px;padding:4px 10px;font-size:12px" onclick="enviarAditivo('${id}')">📤 Enviar para validação</button>
+    <div style="font-size:11px;color:var(--text3);margin-top:6px">O aditivo só aparece no cabeçalho depois que a Conta Geral (senha master) conferir o termo e validar. Deixe o PDF na pasta da ACB com compartilhamento restrito (não use "qualquer pessoa com o link").</div>
+  </div>`;
+}
+function pedirLinkTermo(){
+  const u = (prompt('Cole o link do termo aditivo (PDF) que está na pasta do projeto no Google Drive:') || '').trim();
+  if (!u) return null;
+  if (!linkDriveOk(u)) { alert('O link precisa ser do Google Drive (começa com https://drive.google.com/).'); return null; }
+  return { link: u };
+}
+async function enviarAditivo(id){
+  const g = c => document.getElementById(`nad-${c}-${id}`);
+  const nome = g('nome').value.trim(), ini = g('ini').value.trim(), fim = g('fim').value.trim(), link = g('link').value.trim();
+  if (!dataOk(ini) || !dataOk(fim)) { alert('Preencha início e fim no formato dd/mm/aaaa.'); return; }
+  if (parseBR(fim) < parseBR(ini)) { alert('A data de fim está antes do início.'); return; }
+  if (!link) { alert('Cole o link do termo aditivo assinado (PDF no Drive). Sem ele o aditivo não pode ser lançado.'); return; }
+  if (!linkDriveOk(link)) { alert('O link precisa ser do Google Drive (começa com https://drive.google.com/).'); return; }
+  _acomp[id].prazos = _acomp[id].prazos || [];
+  _acomp[id].prazos.push({ k: 'ad' + Date.now(), nome: nome || ((_acomp[id].prazos.length+1) + 'º Termo Aditivo'), ini, fim, arquivo: { link }, enviadoEm: new Date().toISOString() });
+  await salvarAcomp(id); renderProjeto(id);
+  alert('Aditivo enviado. Ele fica pendente até a Conta Geral conferir o termo e validar.');
+}
+async function anexarTermo(id, i){
+  const arquivo = pedirLinkTermo(); if (!arquivo) return;
+  const a = _acomp[id].prazos[i]; a.arquivo = arquivo; a.k = a.k || ('ad' + Date.now()); a.enviadoEm = new Date().toISOString();
+  await salvarAcomp(id); renderProjeto(id);
+}
+function abrirTermoAditivo(id, i){
+  const u = linkTermo(_acomp[id].prazos[i]);
+  if (!linkDriveOk(u)) { alert('Este aditivo não tem um link válido do Drive.'); return; }
+  window.open(u, '_blank', 'noopener');
+}
+async function validarAditivo(id, i){
+  const a = _acomp[id].prazos[i];
+  if (!confirm(`Confirma que conferiu o termo e quer validar "${a.nome}" (${a.ini} a ${a.fim})?`)) return;
+  const reg = { por: nomeValidador(), em: new Date().toISOString() };
+  try { await db.collection('acompanhamento').doc(id).set({ validacaoAditivos: { [a.k]: reg } }, { merge:true }); }
+  catch(e){ alert('Não foi possível validar (sem permissão): ' + e.message); return; }
+  _validAd[id] = _validAd[id] || {}; _validAd[id][a.k] = reg; renderProjeto(id);
 }
 
 function cronogramaDe(id){ return PROJETOS[id].cronograma || (_acomp[id] && _acomp[id].cronograma) || []; }
@@ -2864,11 +2948,11 @@ async function carregarPerfilUsuario(uid, email) {
       document.getElementById('sidebar-user-role').textContent = 'Usuário';
       currentPerfil = 'admin'; // primeiro acesso = admin
     }
-    document.getElementById('nav-admin').style.display = (currentPerfil === 'admin' || currentPerfil === 'coordenador') ? 'block' : 'none';
+    document.getElementById('nav-admin').style.display = ['admin','geral','coordenador'].includes(currentPerfil) ? 'block' : 'none';
   } catch(e) { console.error(e); }
 }
 
-const PERFIS = { admin:'Administrador', coordenador:'Coordenador', financeiro:'Financeiro', tecnico:'Técnico' };
+const PERFIS = { admin:'Administrador', geral:'Conta Geral', coordenador:'Coordenador', financeiro:'Financeiro', tecnico:'Técnico' };
 
 // ─── Fases do beneficiário (substitui/estende o status antigo de 5 valores) ──
 const FASE_ORDEM = ['reunioes','cadastro','capacitacao','visita_tecnica','recebimento_material','construcao','finalizacao','pagamento_pedreiro','pagamento_beneficiario','assinatura_termo'];

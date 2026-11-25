@@ -57,6 +57,8 @@
 .proj-tags{display:flex;flex-wrap:wrap;gap:8px}
 .proj-tag{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);padding:5px 12px;border-radius:20px;font-size:11px;font-weight:600}
 .proj-tag b{color:var(--gold)}
+.proj-tag.venc{background:#b91c1c;border-color:#fca5a5;color:#fff}
+.proj-tag.venc b{color:#fff}
 .meta-block{border:1px solid var(--border);border-radius:12px;margin-bottom:14px;overflow:hidden}
 .meta-head{background:var(--green3);padding:13px 16px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
 .meta-head .mh-tit{font-size:13px;font-weight:800;color:var(--dark)}
@@ -1750,6 +1752,42 @@ const PROJETOS = {
       ]},
     ]
   },
+  'assistencia-social': {
+    id:'assistencia-social', nome:'Assistência Social ACB', icone:'🤝', senha:'socialacb26', social:true,
+    objeto:'Plano de Trabalho da Assistência Social da ACB para o 4º trimestre de 2026: planejamento e monitoramento por indicadores, atendimento e encaminhamentos à rede (CRAS e CREAS), oficinas temáticas de educação permanente, articulação em rede e controle social, e ações de assessoramento e de defesa e garantia de direitos (Resolução CNAS nº 182/2025), com foco nos indicadores do CEBAS. Ações contínuas sem número fixo: estudos sociais e acompanhamento das beneficiárias(os) dos projetos (conforme necessidade), encaminhamentos com atualização do NIS (100% dos casos identificados) e representação da ACB em eventos (conforme convite).',
+    concedente:'ACB — Setor de Assistência Social (Responsável técnica: Sally Carneiro de Oliveira, CRESS 3ª Região nº 16.881)',
+    edital:'Plano de Trabalho 4º trimestre 2026 (16/10/2026) · Resolução CNAS nº 182/2025 · CEBAS',
+    periodoIni:'01/10/2026', periodoFim:'31/12/2026',
+    valorGlobal:0,
+    publico:'Equipes da ACB, beneficiárias(os) dos projetos em execução, movimentos sociais, associações e sindicatos de Crato (CE) e do Território do Cariri, em articulação com CRAS, CREAS, Secretaria Municipal de Assistência Social e Cidadania, CMAS e Comitê Gestor da ACB.',
+    // Metas oficiais: Plano de Trabalho out–dez/2026 da assistente social (Drive > Assistência Social > DOCUMENTOS ACB 2026).
+    metas:[
+      { n:1, titulo:'Planejamento, indicadores e relatórios', valor:0, qtdInput:true, etapas:[
+        { cod:'1.1', titulo:'Registro e fechamento dos indicadores mensais (out, nov, dez)', valor:0, itens:[{cod:'1.1', desc:'Fechamentos mensais', un:'fechamentos', qtd:3}]},
+        { cod:'1.2', titulo:'Apresentação trimestral dos indicadores ao Comitê Gestor', valor:0, itens:[{cod:'1.2', desc:'Apresentação ao Comitê', un:'apresentação', qtd:1}]},
+        { cod:'1.3', titulo:'Relatório trimestral de atividades ao Comitê (out–dez), entregue no fim de dezembro', valor:0, itens:[{cod:'1.3', desc:'Relatório trimestral', un:'relatório', qtd:1}]},
+        { cod:'1.4', titulo:'Minuta do Relatório de Atividades 2026 e do Plano de Ação 2027', valor:0, itens:[{cod:'1.4', desc:'Relatório 2026 + Plano 2027', un:'documentos', qtd:2}]},
+        { cod:'1.5', titulo:'Instrumentais e produtos: encaminhamento com NIS, solicitação de demanda, calendário SUAS 2027, modelo de relatório trimestral e apresentação de indicadores', valor:0, itens:[{cod:'1.5', desc:'Instrumentais e produtos', un:'produtos', qtd:5}]},
+      ]},
+      { n:2, titulo:'Atendimento, acompanhamento e encaminhamentos', valor:0, qtdInput:true, etapas:[
+        { cod:'2.1', titulo:'Visitas técnicas quinzenais ao CRAS', valor:0, itens:[{cod:'2.1', desc:'Visitas ao CRAS (2 por mês)', un:'visitas', qtd:6}]},
+        { cod:'2.2', titulo:'Visita técnica ao CREAS', valor:0, itens:[{cod:'2.2', desc:'Visita ao CREAS', un:'visita', qtd:1}]},
+      ]},
+      { n:3, titulo:'Formação e oficinas temáticas', valor:0, qtdInput:true, etapas:[
+        { cod:'3.1', titulo:'Oficinas temáticas mensais para equipes da ACB, movimentos sociais, associações e sindicatos', valor:0, itens:[{cod:'3.1', desc:'Oficinas (1 por mês)', un:'oficinas', qtd:3}]},
+        { cod:'3.2', titulo:'Oficina sobre direitos e prevenção da violência de gênero (16 Dias de Ativismo, 25/11 a 10/12)', valor:0, itens:[{cod:'3.2', desc:'Oficina 16 Dias de Ativismo', un:'atividade', qtd:1}]},
+        { cod:'3.3', titulo:'Reunião de sensibilização com os coordenadores sobre os indicadores do CEBAS', valor:0, itens:[{cod:'3.3', desc:'Reunião com coordenadores', un:'reunião', qtd:1}]},
+      ]},
+      { n:4, titulo:'Articulação em rede e controle social', valor:0, qtdInput:true, etapas:[
+        { cod:'4.1', titulo:'Reuniões mensais com o Comitê Gestor para alinhamento de demandas', valor:0, itens:[{cod:'4.1', desc:'Reuniões com o Comitê', un:'reuniões', qtd:3}]},
+        { cod:'4.2', titulo:'Reunião com o Secretário Municipal de Assistência Social e Cidadania', valor:0, itens:[{cod:'4.2', desc:'Reunião com o Secretário', un:'reunião', qtd:1}]},
+        { cod:'4.3', titulo:'Participação nas capacitações do Aprimora Rede+ (out–dez)', valor:0, itens:[{cod:'4.3', desc:'Capacitações (1 por mês)', un:'participações', qtd:3}]},
+      ]},
+      { n:5, titulo:'Assessoramento, defesa e garantia de direitos', valor:0, qtdInput:true, etapas:[
+        { cod:'5.1', titulo:'Devolutiva técnica à equipe dos projetos sobre a aplicação da Resolução CNAS nº 182/2025 (reunião geral)', valor:0, itens:[{cod:'5.1', desc:'Devolutiva técnica', un:'devolutiva', qtd:1}]},
+      ]},
+    ]
+  },
 };
 
 // ── Portal: layout tipo sistema, senha ao clicar no projeto ──
@@ -1792,7 +1830,7 @@ async function abrirGestaoGeral(){
 }
 
 function renderGestaoGeral(){
-  const ids = Object.keys(PROJETOS);
+  const ids = Object.keys(PROJETOS).filter(k => !PROJETOS[k].social);
   const totalGlobal = ids.reduce((s,id) => s + valorGlobalAtual(id), 0);
   let totalAtraso = 0, metasOk = 0, metasTot = 0;
   const rows = ids.map(id => {
@@ -1929,7 +1967,12 @@ function renderProjeto(id){
   if (p.concedente) tagArr.push(`<span class="proj-tag">🏛️ ${p.concedente}</span>`);
   if (p.edital) tagArr.push(`<span class="proj-tag">📋 ${p.edital}</span>`);
   if (p.metaFisica) tagArr.push(`<span class="proj-tag">🎯 ${p.metaFisica} ${p.unidade||''}</span>`);
-  tagArr.push(`<span class="proj-tag">📅 ${perTxt}</span>`);
+  // Vigência original + aditivos de prazo: período vencido em vermelho, o vigente na cor padrão
+  vigencias(id).forEach(v => {
+    const cls = v.status === 'vencido' ? 'proj-tag venc' : 'proj-tag';
+    const tit = v.status === 'vencido' ? 'Período vencido' : v.status === 'vigente' ? 'Período em vigência' : 'Período futuro';
+    tagArr.push(`<span class="${cls}" title="${tit}">📅 <b>${v.nome}</b> ${v.ini||'—'} → ${v.fim||'—'}</span>`);
+  });
   const tags = tagArr.join('');
 
   const vgAtual = valorGlobalAtual(id);
@@ -1947,12 +1990,21 @@ function renderProjeto(id){
     kpiArr.push(`<div class="kpi" style="border-left-color:var(--gold)"><div class="kpi-val" style="font-size:20px">${fmt(p.metas[0].valor)}</div><div class="kpi-label">${p.metas[0].titulo}</div></div>`);
     kpiArr.push(`<div class="kpi" style="border-left-color:var(--green2)"><div class="kpi-val">${p.metas.length}</div><div class="kpi-label">Componentes</div></div>`);
   }
+  if (p.social) {
+    const nAcoes = p.metas.reduce((s,m) => s + (m.etapas||[]).length, 0);
+    kpiArr = [
+      `<div class="kpi"><div class="kpi-val">${p.metas.length}</div><div class="kpi-label">Metas do Plano</div></div>`,
+      `<div class="kpi" style="border-left-color:var(--blue)"><div class="kpi-val">${nAcoes}</div><div class="kpi-label">Ações</div></div>`,
+      `<div class="kpi" style="border-left-color:var(--gold)"><div class="kpi-val">${_acomp[id] ? percFisico(id) : 0}%</div><div class="kpi-label">Execução do Plano</div></div>`,
+      `<div class="kpi" style="border-left-color:var(--green2)"><div class="kpi-val">${((_acomp[id]&&_acomp[id].enc)||[]).reduce((s,x)=>s+(+x.qtd||1),0)}</div><div class="kpi-label">Encaminhamentos</div></div>`,
+    ];
+  }
   const kpis = `<div class="grid-4" style="margin-bottom:16px">${kpiArr.slice(0,4).join('')}</div>`;
 
   const edit = podeEditarAcomp(id);
 
   // Tabela de metas/etapas/itens
-  const metasHtml = p.metas.map(m => {
+  let metasHtml = p.metas.map(m => {
     const aditivoHtml = renderAditivo(id, m, edit);
     if (!temEtapas(m)) {  // meta simples (sem etapas)
       const per = (m.dataIni ? `<div class="etapa-tit"><span>Período</span><span>${m.dataIni}${m.dataFim?' a '+m.dataFim:''}</span></div>` : '');
@@ -1979,6 +2031,13 @@ function renderProjeto(id){
       ${etapas}
     </div>`;
   }).join('');
+  if (p.social) {  // Assistência Social: metas e ações em quantidade, sem valores em R$
+    metasHtml = p.metas.map(m => `<div class="meta-block">
+      <div class="meta-head"><div class="mh-tit"><small>Meta ${m.n}</small>${m.titulo}</div></div>
+      <div class="table-wrap"><table><thead><tr><th>Ação</th><th>Descrição</th><th style="text-align:center">Meta</th><th style="text-align:center">Unidade</th></tr></thead><tbody>
+      ${(m.etapas||[]).map(e => { const it = (e.itens||[])[0] || {}; return `<tr><td style="white-space:nowrap;color:var(--text3)">${e.cod}</td><td>${e.titulo}</td><td style="text-align:center;font-weight:700">${it.qtd!=null?it.qtd:'—'}</td><td style="text-align:center">${it.un||'—'}</td></tr>`; }).join('')}
+      </tbody></table></div></div>`).join('');
+  }
 
   // ── Identificação (com campos editáveis) ──
   const inp = (campo, val, ph, w) => `<input class="acomp-date" style="width:${w||'160px'}" placeholder="${ph||''}" value="${val||''}" onchange="editInfo('${id}','${campo}',this.value)">`;
@@ -1989,6 +2048,7 @@ function renderProjeto(id){
   if (p.ptNumero) idRows.push(`<tr><td style="font-weight:700">Plano de Trabalho</td><td>nº ${p.ptNumero}${p.registro?' · Registro '+p.registro:''}</td></tr>`);
   if (p.metaFisica) idRows.push(`<tr><td style="font-weight:700">Meta Física</td><td>${p.metaFisica} ${p.unidade||''}</td></tr>`);
   idRows.push(`<tr><td style="font-weight:700">Período do contrato</td><td>${edit && !p.periodoIni ? inp('periodoIni',perIni,'Início',130)+' a '+inp('periodoFim',perFim,'Fim',130) : (perIni||perFim ? `${perIni||'—'} a ${perFim||'—'}` : '<span style="color:var(--text3)">a definir</span>')}</td></tr>`);
+  idRows.push(`<tr><td style="font-weight:700">Aditivos de prazo</td><td>${renderPrazosAditivos(id, edit)}</td></tr>`);
   const iniAtiv = info.inicioAtividades || '', fimAtiv = info.fimAtividades || '';
   idRows.push(`<tr><td style="font-weight:700">Início das atividades</td><td>${edit ? inp('inicioAtividades',iniAtiv,'dd/mm/aaaa',130) + ' <span style="font-size:10px;color:var(--text3)">quando começou de fato</span>' : (iniAtiv || '<span style="color:var(--text3)">a definir</span>')}</td></tr>`);
   idRows.push(`<tr><td style="font-weight:700">Término das atividades</td><td>${edit ? inp('fimAtividades',fimAtiv,'dd/mm/aaaa',130) + ' <span style="font-size:10px;color:var(--text3)">prazo real (ex.: 6 meses após o início)</span>' : (fimAtiv || '<span style="color:var(--text3)">a definir</span>')}</td></tr>`);
@@ -2041,8 +2101,8 @@ function renderProjeto(id){
 
     <div class="page-tabs" id="proj-tabs">
       <div class="page-tab active" onclick="projTab(this,'pt-geral')">Visão Geral</div>
-      <div class="page-tab" onclick="projTab(this,'pt-metas')">Metas & Despesas</div>
-      <div class="page-tab" onclick="projTab(this,'pt-cron')">Cronograma de Desembolso</div>
+      <div class="page-tab" onclick="projTab(this,'pt-metas')">${p.social ? 'Plano de Ação' : 'Metas & Despesas'}</div>
+      ${p.social ? '' : `<div class="page-tab" onclick="projTab(this,'pt-cron')">Cronograma de Desembolso</div>`}
       <div class="page-tab" onclick="projTab(this,'pt-acomp')">📊 Dashboard</div>
     </div>
 
@@ -2054,8 +2114,8 @@ function renderProjeto(id){
           <table><tbody>${idRows.join('')}</tbody></table>
         </div>
         <div class="card">
-          <div class="card-title">Resumo <span>Financeiro</span></div>
-          <table><tbody>${finRows.join('')}</tbody></table>
+          <div class="card-title">${p.social ? 'Público <span>e Base Legal</span>' : 'Resumo <span>Financeiro</span>'}</div>
+          ${p.social ? '<p style="font-size:13px;color:var(--text2)">Ações de <b>assessoramento</b> e de <b>defesa e garantia de direitos</b> (Resolução CNAS nº 182/2025), base para a manutenção da certificação <b>CEBAS</b>.</p>' : `<table><tbody>${finRows.join('')}</tbody></table>`}
           ${p.publico ? `<div style="margin-top:14px;padding:12px 14px;background:var(--green3);border-radius:8px;font-size:12px;color:var(--text2)"><b>Público-alvo:</b> ${p.publico}</div>` : ''}
         </div>
       </div>
@@ -2154,6 +2214,7 @@ async function carregarAcomp(id){
   _acomp[id].parcelas = _acomp[id].parcelas || {};
   _acomp[id].info = _acomp[id].info || {};
   _acomp[id].cronograma = _acomp[id].cronograma || [];
+  _acomp[id].prazos = _acomp[id].prazos || [];
   _acomp[id].metasPerc = _acomp[id].metasPerc || {};
   _acomp[id].aditivos = _acomp[id].aditivos || {};
   _acomp[id].obsMetas = _acomp[id].obsMetas || {};
@@ -2193,6 +2254,156 @@ function renderIndicadoresSig(id, edit){
 }
 
 // Cronograma: fixo do plano (Ceará) OU editável (cisternas etc.)
+// ─── Assistência Social (projeto com social:true): atendimentos e encaminhamentos ───
+// Salvos em acompanhamento/assistencia-social (campos atend e enc). Só números: sem nome/CPF.
+const AS_GRUPOS = ['Beneficiárias(os) dos projetos','Equipes da ACB','Movimentos sociais / associações / sindicatos','Mulheres','Jovens','Crianças e adolescentes','Pessoas idosas','Pessoas com deficiência','Agricultores(as) familiares','Quilombolas','Indígenas','Famílias beneficiárias','Lideranças comunitárias','Outro'];
+const AS_ORGAOS = ['CRAS','CREAS','CAPS','UBS / Saúde','Conselho Tutelar','INSS','Cadastro Único','Defensoria Pública','Ministério Público','Delegacia / DDM','Casa da Mulher Cearense','Secretaria de Assistência Social','Outro'];
+function asProjOpts(){ return '<option value="">ACB (institucional)</option>' + Object.values(PROJETOS).filter(p => !p.social).map(p => `<option value="${p.id}">${p.nome}</option>`).join(''); }
+function asNomeProj(pid){ return pid && PROJETOS[pid] ? PROJETOS[pid].nome : 'ACB (institucional)'; }
+function asEsc(s){ return String(s==null?'':s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function asHoje(){ const d = new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+function asBR(iso){ return iso ? iso.split('-').reverse().join('/') : '—'; }
+function asSegunda(d){ const x = new Date(d); x.setHours(0,0,0,0); x.setDate(x.getDate() - (x.getDay()+6)%7); return x; }
+function asISO(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+let _asSemana = null;
+
+function asAddReg(id, tipo){
+  const g = k => (document.getElementById(k)||{}).value || '';
+  const n = v => Math.max(0, parseInt(String(v).replace(/\D/g,''),10) || 0);
+  _acomp[id][tipo] = _acomp[id][tipo] || [];
+  if (tipo === 'atend') {
+    const qtd = n(g('asat-qtd'));
+    if (!g('asat-data') || !qtd) { alert('Preencha a data e o número de pessoas.'); return; }
+    _acomp[id].atend.push({ data:g('asat-data'), grupo:g('asat-grupo'), tipo:g('asat-tipo'), projeto:g('asat-proj'), qtd, obs:g('asat-obs').trim(), criadoEm:Date.now() });
+  } else {
+    if (!g('asen-data')) { alert('Preencha a data.'); return; }
+    _acomp[id].enc.push({ data:g('asen-data'), orgao:g('asen-orgao'), grupo:g('asen-grupo'), projeto:g('asen-proj'), qtd:n(g('asen-qtd')) || 1, retorno:g('asen-ret'), motivo:g('asen-motivo').trim(), criadoEm:Date.now() });
+  }
+  salvarAcomp(id); refreshAcomp(id);
+}
+function asDelReg(id, tipo, criadoEm){
+  if (!confirm('Excluir este registro?')) return;
+  _acomp[id][tipo] = (_acomp[id][tipo]||[]).filter(r => r.criadoEm !== criadoEm);
+  salvarAcomp(id); refreshAcomp(id);
+}
+function asRetorno(id, criadoEm, val){ const r = (_acomp[id].enc||[]).find(x => x.criadoEm === criadoEm); if (r) { r.retorno = val; salvarAcomp(id); refreshAcomp(id); } }
+function asMudarSemana(id, val){ if (val) { _asSemana = asSegunda(new Date(val+'T12:00:00')); refreshAcomp(id); } }
+
+function renderSocialCard(id, edit){
+  const p = PROJETOS[id]; if (!p.social) return '';
+  const at = (_acomp[id].atend||[]), en = (_acomp[id].enc||[]);
+  const ano = String(new Date().getFullYear());
+  const atA = at.filter(x => (x.data||'').startsWith(ano)), enA = en.filter(x => (x.data||'').startsWith(ano));
+  const soma = (l, campo, qtd) => Object.entries(l.reduce((r,x) => { const k = x[campo] || 'Não informado'; r[k] = (r[k]||0) + (+x[qtd]||1); return r; }, {})).sort((a,b) => b[1]-a[1]);
+  const tabela = (pares, vazio) => pares.length ? pares.map(([k,v]) => `<tr><td>${asEsc(k)}</td><td style="text-align:right;font-weight:700">${v}</td></tr>`).join('') : `<tr><td colspan="2" style="color:var(--text3)">${vazio}</td></tr>`;
+  const opt = l => l.map(o => `<option>${o}</option>`).join('');
+  const pessoas = atA.reduce((s,x) => s + (+x.qtd||0), 0), encQ = enA.reduce((s,x) => s + (+x.qtd||1), 0);
+  const aguard = en.filter(x => x.retorno === 'aguardando').length;
+
+  const kpis = `<div class="grid-4" style="margin-bottom:16px">
+    <div class="kpi"><div class="kpi-val">${pessoas}</div><div class="kpi-label">Pessoas atendidas</div><div class="kpi-sub">${atA.length} registros em ${ano}</div></div>
+    <div class="kpi" style="border-left-color:var(--blue)"><div class="kpi-val">${encQ}</div><div class="kpi-label">Encaminhamentos</div><div class="kpi-sub">em ${ano}</div></div>
+    <div class="kpi" style="border-left-color:var(--gold)"><div class="kpi-val">${aguard}</div><div class="kpi-label">Aguardando retorno</div></div>
+    <div class="kpi" style="border-left-color:var(--green2)"><div class="kpi-val">${soma(enA,'orgao','qtd').length}</div><div class="kpi-label">Órgãos acionados</div></div>
+  </div>`;
+
+  const formAt = edit ? `<div class="form-row cols-3">
+      <div class="form-group"><label>Data</label><input id="asat-data" type="date" value="${asHoje()}"></div>
+      <div class="form-group"><label>Grupo</label><select id="asat-grupo">${opt(AS_GRUPOS)}</select></div>
+      <div class="form-group"><label>Nº de pessoas</label><input id="asat-qtd" inputmode="numeric" placeholder="Ex.: 12"></div>
+    </div><div class="form-row cols-3">
+      <div class="form-group"><label>Tipo</label><select id="asat-tipo">${opt(['Atendimento individual','Atendimento em grupo','Visita domiciliar','Oficina / roda de conversa'])}</select></div>
+      <div class="form-group"><label>Projeto</label><select id="asat-proj">${asProjOpts()}</select></div>
+      <div class="form-group"><label>Observação (sem nomes)</label><input id="asat-obs" placeholder="Tema, demanda principal..."></div>
+    </div><button class="btn btn-green btn-sm" onclick="asAddReg('${id}','atend')">+ Registrar atendimento</button>` : '';
+  const listaAt = at.slice().sort((a,b) => (b.data||'').localeCompare(a.data||'')).slice(0,30).map(x => `<tr><td style="white-space:nowrap">${asBR(x.data)}</td><td>${asEsc(x.grupo)}</td><td>${asEsc(x.tipo||'')}</td><td>${asEsc(asNomeProj(x.projeto))}</td><td style="text-align:right;font-weight:700">${+x.qtd||0}</td><td>${asEsc(x.obs||'')}</td><td>${edit?`<button class="btn btn-outline btn-sm" onclick="asDelReg('${id}','atend',${x.criadoEm})">🗑️</button>`:''}</td></tr>`).join('')
+    || '<tr><td colspan="7" style="color:var(--text3)">Nenhum atendimento registrado.</td></tr>';
+
+  const formEn = edit ? `<div class="form-row cols-3">
+      <div class="form-group"><label>Data</label><input id="asen-data" type="date" value="${asHoje()}"></div>
+      <div class="form-group"><label>Órgão</label><select id="asen-orgao">${opt(AS_ORGAOS)}</select></div>
+      <div class="form-group"><label>Quantidade</label><input id="asen-qtd" inputmode="numeric" value="1"></div>
+    </div><div class="form-row cols-3">
+      <div class="form-group"><label>Grupo</label><select id="asen-grupo">${opt(AS_GRUPOS)}</select></div>
+      <div class="form-group"><label>Projeto</label><select id="asen-proj">${asProjOpts()}</select></div>
+      <div class="form-group"><label>Retorno</label><select id="asen-ret"><option value="aguardando">Aguardando retorno</option><option value="atendido">Atendido</option><option value="sem_retorno">Sem retorno</option></select></div>
+    </div><div class="form-group" style="margin-bottom:10px"><label>Motivo (sem nomes)</label><input id="asen-motivo" placeholder="Ex.: acesso ao BPC, atualização do CadÚnico"></div>
+    <button class="btn btn-green btn-sm" onclick="asAddReg('${id}','enc')">+ Registrar encaminhamento</button>` : '';
+  const RET = { aguardando:'Aguardando', atendido:'Atendido', sem_retorno:'Sem retorno' };
+  const listaEn = en.slice().sort((a,b) => (b.data||'').localeCompare(a.data||'')).slice(0,30).map(x => `<tr><td style="white-space:nowrap">${asBR(x.data)}</td><td>${asEsc(x.orgao)}</td><td style="text-align:right;font-weight:700">${+x.qtd||1}</td><td>${asEsc(x.grupo||'')}</td><td>${asEsc(asNomeProj(x.projeto))}</td><td>${asEsc(x.motivo||'')}</td>
+      <td>${edit ? `<select class="acomp-date" onchange="asRetorno('${id}',${x.criadoEm},this.value)">${Object.entries(RET).map(([k,v]) => `<option value="${k}" ${x.retorno===k?'selected':''}>${v}</option>`).join('')}</select>` : (RET[x.retorno]||'—')}</td>
+      <td>${edit?`<button class="btn btn-outline btn-sm" onclick="asDelReg('${id}','enc',${x.criadoEm})">🗑️</button>`:''}</td></tr>`).join('')
+    || '<tr><td colspan="8" style="color:var(--text3)">Nenhum encaminhamento registrado.</td></tr>';
+
+  // Resumo da semana (padrão: semana anterior, para a prestação de contas de segunda-feira)
+  const ini = _asSemana || (() => { const s = asSegunda(new Date()); s.setDate(s.getDate()-7); return s; })();
+  const fim = new Date(ini); fim.setDate(fim.getDate()+6);
+  const a = asISO(ini), b = asISO(fim);
+  const atS = at.filter(x => x.data >= a && x.data <= b), enS = en.filter(x => x.data >= a && x.data <= b);
+  const txt = pares => pares.map(([k,v]) => `${asEsc(k)}: ${v}`).join(' · ') || 'nenhum';
+  const fis = percFisico(id);
+  const semana = `<div class="card" style="margin-bottom:16px"><div class="card-title">Resumo <span>da semana</span></div>
+    <div class="search-bar" style="margin-bottom:10px"><label style="font-size:12px;font-weight:700">Semana de</label>
+      <input class="search-input" type="date" style="max-width:180px" value="${a}" onchange="asMudarSemana('${id}',this.value)">
+      <button class="btn btn-outline btn-sm" onclick="window.print()">🖨️ Imprimir</button></div>
+    <table><tbody>
+      <tr><td style="font-weight:700;width:45%">Período</td><td>${asBR(a)} a ${asBR(b)}</td></tr>
+      <tr><td style="font-weight:700">Atendimentos</td><td>${atS.length} registros · <b>${atS.reduce((s,x)=>s+(+x.qtd||0),0)} pessoas</b></td></tr>
+      <tr><td style="font-weight:700">Pessoas por grupo</td><td>${txt(soma(atS,'grupo','qtd'))}</td></tr>
+      <tr><td style="font-weight:700">Encaminhamentos</td><td><b>${enS.reduce((s,x)=>s+(+x.qtd||1),0)}</b> · ${txt(soma(enS,'orgao','qtd'))}</td></tr>
+      <tr><td style="font-weight:700">Aguardando retorno (total)</td><td>${aguard}</td></tr>
+      <tr><td style="font-weight:700">Plano de Ação (execução geral)</td><td>${fis}%</td></tr>
+    </tbody></table></div>`;
+
+  return `${kpis}${semana}
+    <div class="grid-2" style="margin-bottom:16px">
+      <div class="card"><div class="card-title">Atendimentos <span>por grupo (${ano})</span></div><div class="table-wrap"><table><tbody>${tabela(soma(atA,'grupo','qtd'),'Nenhum atendimento registrado.')}</tbody></table></div></div>
+      <div class="card"><div class="card-title">Encaminhamentos <span>por órgão (${ano})</span></div><div class="table-wrap"><table><tbody>${tabela(soma(enA,'orgao','qtd'),'Nenhum encaminhamento registrado.')}</tbody></table></div></div>
+    </div>
+    <div class="card" style="margin-bottom:16px"><div class="card-title">Atendimentos</div>
+      <div class="alert alert-info" style="margin-bottom:10px">🔒 Registre só números. Não coloque nome, CPF, telefone ou endereço de pessoas atendidas.</div>
+      ${formAt}<div class="table-wrap" style="margin-top:12px"><table><thead><tr><th>Data</th><th>Grupo</th><th>Tipo</th><th>Projeto</th><th style="text-align:right">Pessoas</th><th>Observação</th><th></th></tr></thead><tbody>${listaAt}</tbody></table></div></div>
+    <div class="card" style="margin-bottom:16px"><div class="card-title">Encaminhamentos</div>
+      ${formEn}<div class="table-wrap" style="margin-top:12px"><table><thead><tr><th>Data</th><th>Órgão</th><th style="text-align:right">Qtd</th><th>Grupo</th><th>Projeto</th><th>Motivo</th><th>Retorno</th><th></th></tr></thead><tbody>${listaEn}</tbody></table></div></div>`;
+}
+
+// ─── Vigência e aditivos de prazo ───
+// Aditivos ficam no código (p.prazosAditivos) ou são lançados no portal (_acomp[id].prazos), pelo responsável.
+function prazosAditivos(id){ return PROJETOS[id].prazosAditivos || (_acomp[id] && _acomp[id].prazos) || []; }
+function dataOk(s){ return !!s && /^\d{2}\/\d{2}\/\d{4}$/.test(s); }
+function vigencias(id){
+  const p = PROJETOS[id], inf = (_acomp[id] && _acomp[id].info) || {};
+  const lista = [{ nome:'Vigência original', ini: inf.periodoIni || p.periodoIni || '', fim: inf.periodoFim || p.periodoFim || '' }]
+    .concat(prazosAditivos(id).map((a,i) => ({ nome: a.nome || ((i+1)+'º Aditivo'), ini: a.ini || '', fim: a.fim || '' })));
+  const h = hojeD();
+  return lista.map(v => {
+    let status = 'sem-data';
+    if (dataOk(v.fim) && parseBR(v.fim) < h) status = 'vencido';
+    else if (dataOk(v.ini) && parseBR(v.ini) > h) status = 'futuro';
+    else if (dataOk(v.fim) || dataOk(v.ini)) status = 'vigente';
+    return { ...v, status };
+  });
+}
+function fimVigencia(id){
+  const comFim = vigencias(id).filter(v => dataOk(v.fim));
+  return comFim.length ? comFim[comFim.length-1].fim : '';
+}
+function addPrazo(id){ _acomp[id].prazos = _acomp[id].prazos || []; _acomp[id].prazos.push({ nome:(_acomp[id].prazos.length+1)+'º Termo Aditivo', ini:'', fim:'' }); salvarAcomp(id); renderProjeto(id); }
+function delPrazo(id, i){ _acomp[id].prazos.splice(i,1); salvarAcomp(id); renderProjeto(id); }
+function editPrazo(id, i, campo, val){ _acomp[id].prazos[i][campo] = String(val).trim(); salvarAcomp(id); renderProjeto(id); }
+function renderPrazosAditivos(id, edit){
+  const fixos = !!PROJETOS[id].prazosAditivos, lista = prazosAditivos(id);
+  if (!(edit && !fixos)) {
+    if (!lista.length) return '<span style="color:var(--text3)">nenhum</span>';
+    return lista.map((a,i) => `${a.nome || ((i+1)+'º Aditivo')}: ${a.ini||'—'} a ${a.fim||'—'}`).join('<br>');
+  }
+  const f = (i,c,v,ph,w) => `<input class="acomp-date" style="width:${w}" placeholder="${ph}" value="${v||''}" onchange="editPrazo('${id}',${i},'${c}',this.value)">`;
+  const linhas = lista.map((a,i) => `<div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:6px">
+      ${f(i,'nome',a.nome,'Nº do aditivo','150px')} ${f(i,'ini',a.ini,'Início dd/mm/aaaa','130px')} a ${f(i,'fim',a.fim,'Fim dd/mm/aaaa','130px')}
+      <button class="btn btn-outline" style="padding:3px 9px" onclick="delPrazo('${id}',${i})" title="Remover">×</button></div>`).join('');
+  return `${linhas}<button class="btn btn-outline" style="padding:4px 10px;font-size:12px" onclick="addPrazo('${id}')">+ Adicionar aditivo de prazo</button>`;
+}
+
 function cronogramaDe(id){ return PROJETOS[id].cronograma || (_acomp[id] && _acomp[id].cronograma) || []; }
 
 // Campos editáveis do cabeçalho (período, responsável…) — salvos, sem re-render (mantém foco)
@@ -2241,7 +2452,7 @@ function editMetaPerc(id, n, val){
 function statusMeta(id, m){
   if (metaAlcancada(id, m)) return 'ok';
   const p = PROJETOS[id], inf = (_acomp[id] && _acomp[id].info) || {};
-  const dIni = inf.inicioAtividades || inf.periodoIni || p.periodoIni, dFim = inf.fimAtividades || inf.periodoFim || p.periodoFim;
+  const dIni = inf.inicioAtividades || inf.periodoIni || p.periodoIni, dFim = inf.fimAtividades || fimVigencia(id);
   const okD = s => s && /^\d{2}\/\d{2}\/\d{4}$/.test(s);
   if (!okD(dIni) || !okD(dFim)) return 'wait'; // sem período definido → sem cálculo de prazo
   const ini = parseBR(dIni), fim = parseBR(dFim), h = hojeD();
@@ -2314,7 +2525,7 @@ function refreshAcomp(id){ const s = document.getElementById('pt-acomp'); if (s)
 // Prazo: usa período (fixo ou preenchido)
 function prazoInfo(id){
   const p = PROJETOS[id], inf = (_acomp[id] && _acomp[id].info) || {};
-  const dIni = inf.inicioAtividades || inf.periodoIni || p.periodoIni, dFim = inf.fimAtividades || inf.periodoFim || p.periodoFim;
+  const dIni = inf.inicioAtividades || inf.periodoIni || p.periodoIni, dFim = inf.fimAtividades || fimVigencia(id);
   const okD = s => s && /^\d{2}\/\d{2}\/\d{4}$/.test(s);
   if (!okD(dIni) || !okD(dFim)) return null;
   const ini = parseBR(dIni), fim = parseBR(dFim), h = hojeD(), DIA = 86400000;
@@ -2524,6 +2735,14 @@ function renderAcompanhamento(id){
 
   const aviso = edit ? '' : `<div class="alert alert-info" style="margin-bottom:14px">👁️ Modo visualização. O registro da execução é feito pelo <b>responsável do projeto</b> (com a senha do projeto).</div>`;
 
+  if (p.social) {
+    const prov = p.metasProvisorias ? `<div class="alert alert-info" style="margin-bottom:14px">📝 Metas provisórias (exemplo). Serão trocadas pelas metas oficiais do Plano de Ação ${new Date().getFullYear()} da assistente social.</div>` : '';
+    const progresso = `<div class="card" style="margin-bottom:16px"><div class="card-title">Plano de Ação <span>vs. Tempo</span></div>
+      ${gauge('Execução do Plano de Ação', fis, 'linear-gradient(90deg,var(--green),var(--green2))')}
+      ${gauge('Tempo decorrido do ano', pr?pr.tempoPerc:0, 'linear-gradient(90deg,#d97706,#f59e0b)')}
+      <div class="verdict ${vCls}"><span class="big">${vIcon}</span><div><b>${sitLbl}.</b> ${metasOk} de ${p.metas.length} metas alcançadas.</div></div></div>`;
+    return `${aviso}${prov}${progresso}<div class="card" style="margin-bottom:16px"><div class="card-title">Plano de Ação <span>— Planejado x Realizado</span></div>${metas}</div>${renderSocialCard(id, edit)}`;
+  }
   const sigCard = renderIndicadoresSig(id, edit);
   return `${aviso}${kpis}${painel}${sigCard}${metaFisicaCard}
     <div class="card"><div class="card-title">Execução <span>Física — Metas &amp; Etapas</span></div>${metas}</div>

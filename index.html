@@ -1213,7 +1213,8 @@ const AV_CRITERIOS = ['Pontualidade e assiduidade','Qualidade do cadastro dos be
 // Senhas master (acessam TODOS os projetos)
 const MASTER = {
   brigida: { nome:'Brígida', papel:'Financeiro', senha:'brigida@2026' },
-  ery:     { nome:'Ery Claudio', papel:'Presidente', senha:'presidente@2026' }
+  ery:     { nome:'Ery Claudio', papel:'Presidente', senha:'presidente@2026' },
+  ramon:   { nome:'Ramon Robson', papel:'Diretor de Projetos', senha:'Dirprojetos@26' }
 };
 
 // Cada projeto = uma aba. Senha própria + dados do Plano de Trabalho.
@@ -1556,8 +1557,18 @@ const PROJETOS = {
   'sda-1': {
     id:'sda-1', nome:'SDA 1', icone:'🌊', senha:'sda1@ce',
     objeto:'Programa de Formação e Mobilização Social para a Convivência com o Semi-Árido — Um Milhão de Cisternas Rurais (P1MC/P1+2). Construção de 850 cisternas de 16 mil litros (consumo), 20 cisternas calçadão com SAFISP (produção) e 9 sistemas de reúso com fossa ecológica (tratamento de água cinza domiciliar). Edital Chamada Pública nº 003/2024 — MDS/SAF.',
-    concedente:'SAF/MDS — Secretaria da Agricultura Familiar',
-    edital:'Chamada Pública nº 003/2024',
+    concedente:'SDA — Secretaria do Desenvolvimento Agrário (CE) · recursos MDS (convênio nº 956085/2024)',
+    edital:'Contrato nº 075/2024 (SACC 1339899) — Chamada Pública nº 003/2024',
+    // Contrato e aditivos: Drive DIRETORIA DE PROJETO 2026-2027 > ... > Sda 1 > "aditivos sda1".
+    // Vigência original: da assinatura (arquivo do contrato datado de 26/09/2024) até 23/05/2026.
+    periodoIni:'26/09/2024', periodoFim:'23/05/2026',
+    prazosAditivos:[
+      { nome:'2º Termo Aditivo', ini:'24/05/2026', fim:'31/05/2027' },
+    ],
+    // Aditivos que não mudam prazo (aparecem na Visão Geral, sem mexer no valor do portal)
+    outrosAditivos:[
+      { nome:'1º Termo Aditivo', desc:'Reajuste dos valores unitários: acréscimo de R$ 716.090,80, valor total do contrato R$ 6.264.253,19 (sem mudança de metas nem de prazo).' },
+    ],
     metaFisica:888, unidade:'estruturas (cisternas 16 mil L + calçadão + reúso c/ fossa ecológica)',
     valorGlobal:6455846.21,
     publico:'Famílias rurais em situação de vulnerabilidade no semiárido, para acesso à água de consumo e produção via cisternas de placa, cisternas calçadão e sistemas de reúso de água cinza domiciliar.',
@@ -1653,7 +1664,7 @@ const PROJETOS = {
     // Data de início do contrato a confirmar com o documento do Contrato nº 052/2025 (pode ser lançada na Visão Geral).
     periodoFim:'30/06/2025',
     // Aditivos de prazo (Drive: DIRETORIA DE PROJETO 2026-2027 > ... > aditivos sda2). MODELO para os demais projetos:
-    // { nome, ini, fim, doc } — doc = link do PDF no Drive da ACB (só abre para quem tem acesso à pasta).
+    // { nome, ini, fim, doc } — doc = link do PDF no Drive. ATENÇÃO: o código é público; só usar link de arquivo/pasta com compartilhamento RESTRITO.
     prazosAditivos:[
       { nome:'1º Termo Aditivo', ini:'01/07/2025', fim:'30/12/2025', doc:'https://drive.google.com/file/d/1QsqX_7T4Ma-gN_LpSAW_7dZZdcejCCha/view' },
       { nome:'2º Termo Aditivo', ini:'31/12/2025', fim:'30/06/2026', doc:'https://drive.google.com/file/d/1cDS_VWTKRp0sKrXSpgonCF8J75LCTz0b/view' },
@@ -1982,6 +1993,7 @@ function renderProjeto(id){
     const tit = v.status === 'vencido' ? 'Período vencido' : v.status === 'vigente' ? 'Período em vigência' : 'Período futuro';
     tagArr.push(`<span class="${cls}" title="${tit}">📅 <b>${v.nome}</b> ${v.ini||'—'} → ${v.fim||'—'}</span>`);
   });
+  if (p.pastaDrive) tagArr.push(`<a class="proj-tag" href="${p.pastaDrive}" target="_blank" rel="noopener" style="text-decoration:none">📁 Pasta no Drive</a>`);
   if (!p.social && !prazosAditivos(id).length) tagArr.push(`<span class="proj-tag" title="Nenhum termo aditivo de prazo">📄 Sem aditivos</span>`);
   const tags = tagArr.join('');
 
@@ -2059,6 +2071,8 @@ function renderProjeto(id){
   if (p.metaFisica) idRows.push(`<tr><td style="font-weight:700">Meta Física</td><td>${p.metaFisica} ${p.unidade||''}</td></tr>`);
   idRows.push(`<tr><td style="font-weight:700">Período do contrato</td><td>${edit && !p.periodoIni ? inp('periodoIni',perIni,'Início',130)+' a '+inp('periodoFim',perFim,'Fim',130) : (perIni||perFim ? `${perIni||'—'} a ${perFim||'—'}` : '<span style="color:var(--text3)">a definir</span>')}</td></tr>`);
   idRows.push(`<tr><td style="font-weight:700">Aditivos de prazo</td><td>${renderPrazosAditivos(id, edit)}</td></tr>`);
+  if (p.outrosAditivos && p.outrosAditivos.length) idRows.push(`<tr><td style="font-weight:700">Outros aditivos</td><td>${p.outrosAditivos.map(a => `<b>${a.nome}</b>: ${a.desc}`).join('<br>')}</td></tr>`);
+  if (!p.social) idRows.push(`<tr><td style="font-weight:700">Pasta do projeto no Drive</td><td>${p.pastaDrive ? `<a href="${p.pastaDrive}" target="_blank" rel="noopener">📁 Abrir pasta no Drive</a> <span style="color:var(--text3);font-size:12px">(só abre para quem tem acesso)</span>` : '<span style="color:var(--text3)">a definir</span>'}</td></tr>`);
   const iniAtiv = info.inicioAtividades || '', fimAtiv = info.fimAtividades || '';
   idRows.push(`<tr><td style="font-weight:700">Início das atividades</td><td>${edit ? inp('inicioAtividades',iniAtiv,'dd/mm/aaaa',130) + ' <span style="font-size:10px;color:var(--text3)">quando começou de fato</span>' : (iniAtiv || '<span style="color:var(--text3)">a definir</span>')}</td></tr>`);
   idRows.push(`<tr><td style="font-weight:700">Término das atividades</td><td>${edit ? inp('fimAtividades',fimAtiv,'dd/mm/aaaa',130) + ' <span style="font-size:10px;color:var(--text3)">prazo real (ex.: 6 meses após o início)</span>' : (fimAtiv || '<span style="color:var(--text3)">a definir</span>')}</td></tr>`);

@@ -1636,6 +1636,57 @@ const PROJETOS = {
     ]
   },
 
+  'sda-2': {
+    id:'sda-2', nome:'SDA 2', icone:'💧', senha:'sda22026',
+    objeto:'Construção de 337 cisternas de placa de 16 mil litros para consumo humano nos municípios de Araripe e Salitre (CE), com mobilização, seleção e cadastramento das famílias, capacitação em Gestão da Água para Consumo Humano (GRH) e formação de pedreiros — Contrato nº 052/2025.',
+    concedente:'SDA — Secretaria do Desenvolvimento Agrário (CE)',
+    edital:'Contrato nº 052/2025 — Chamada Pública nº 003/2024',
+    metaFisica:337, unidade:'cisternas de 16 mil L',
+    valorGlobal:2216122.11,
+    publico:'337 famílias rurais de Araripe e Salitre (CE) sem acesso adequado à água para consumo humano.',
+    // Fonte: Drive "DIRETORIA DE PROJETO 2026-2027 > PROJETOS > dados projetos > Indicadores Plano de Trabalho > Sda 2"
+    // (Plano de trabalho exemplo atualizado SDA II Araripe e Salitre.xlsx). Valor a receber: 337 x R$ 6.576,03.
+    // Custo de execução previsto R$ 2.180.430,44; diferença (R$ 35.691,67) = superávit previsto no plano.
+    periodoIni:'17/04/2021', periodoFim:'17/04/2026', // vigência conforme o Sig Cisternas (contrato Inativo em 25/11/2026)
+    indicadoresSig:[
+      { k:'familiasCadastradas', lbl:'Famílias cadastradas no Sig', meta:337 },
+      { k:'cisternasConstruidas', lbl:'Cisternas construídas', meta:337 },
+      { k:'termosRecebimento', lbl:'Beneficiários com termo', meta:337 },
+      { k:'termosAprovados', lbl:'Termos aprovados pelo MDS', meta:337 },
+      { k:'termosAguardandoMDS', lbl:'Termos aprovados pela ACB, aguardando o MDS', meta:null },
+      { k:'termosReprovados', lbl:'Termos reprovados pelo MDS (pedem correção)', meta:null },
+      { k:'grhRealizadas', lbl:'Capacitações GRH realizadas (turmas)', meta:12 },
+      { k:'participantesGRH', lbl:'Participantes das GRH', meta:337 },
+      { k:'formacaoPedreiros', lbl:'Formações de pedreiros', meta:1 },
+    ],
+    // Valores conferidos no Sig Cisternas em 25/11/2026 (contrato 52/2025, Inativo)
+    seedSig:{ familiasCadastradas:337, cisternasConstruidas:337, termosRecebimento:337, termosAprovados:272, termosAguardandoMDS:64, termosReprovados:1, grhRealizadas:12, participantesGRH:336, formacaoPedreiros:1, atualizadoEm:'25/11/2026', fonte:'Sig Cisternas' },
+    metas:[
+      { n:1, titulo:'Cisternas 16.000 Litros', valor:2180430.44, etapas:[
+        { cod:'1.1', titulo:'Mobilização, Seleção e Cadastramento', valor:54724.24, itens:[
+          {cod:'1.1.1', desc:'Encontro Territorial/Regional (30 participantes)', un:'UND', qtd:1, vUnit:313.16, vTotal:9394.80},
+          {cod:'1.1.2', desc:'Mobilização de Comissão Local para a Seleção dos Beneficiários', un:'UND', qtd:1, vUnit:111.02, vTotal:2220.40},
+          {cod:'1.1.3', desc:'Seleção e Cadastramento de Famílias', un:'UND', qtd:337, vUnit:127.92, vTotal:43109.04},
+        ]},
+        { cod:'1.2', titulo:'Processo Formativo', valor:195840.64, itens:[
+          {cod:'1.2.1', desc:'Gestão da Água para Consumo Humano (GRH)', un:'UND', qtd:337, vUnit:527.12, vTotal:177639.44},
+          {cod:'1.2.2', desc:'Técnicas de Construção de Cisternas (16.000 L) — Pedreiro', un:'UND', qtd:1, vUnit:1820.12, vTotal:18201.20},
+        ]},
+        { cod:'1.3', titulo:'Processo Construtivo', valor:1760034.54, itens:[
+          {cod:'1.3.1', desc:'Cisternas de Placa 16 Mil Litros', un:'UND', qtd:337, vUnit:5222.65, vTotal:1760034.54},
+        ]},
+        { cod:'1.4', titulo:'Custeio do Projeto', valor:169831.02, itens:[
+          {cod:'1.4.1', desc:'Pessoal e Encargos', un:'mês', qtd:6, vUnit:16929.11, vTotal:101574.64},
+          {cod:'1.4.2', desc:'Despesas Administrativas', un:'mês', qtd:6, vUnit:1700.00, vTotal:10200.00},
+          {cod:'1.4.3', desc:'Custos de Logística', un:'UND', qtd:1, vTotal:58056.38},
+        ]},
+        { cod:'1.5', titulo:'Materiais de Comunicação', valor:0, itens:[
+          {cod:'1.5.1', desc:'Material de Comunicação — Cartilha GRH', un:'UND', qtd:337, vTotal:0},
+        ]},
+      ]},
+    ]
+  },
+
   'sementes-do-futuro': {
     id:'sementes-do-futuro', nome:'Sementes do Futuro', icone:'🌾', senha:'sementes@2026',
     objeto:'Projeto Sementes do Futuro — Da Terra à Mesa: estruturação de Unidades Familiares de Produção Agroecológica (UFPAs) com 600 mulheres e jovens beneficiários(as) — seleção, diagnósticos participativos, planos de estruturação, percursos formativos, cursos FIC e acompanhamento. Termo de Fomento (MDA).',
@@ -2106,6 +2157,39 @@ async function carregarAcomp(id){
   _acomp[id].metasPerc = _acomp[id].metasPerc || {};
   _acomp[id].aditivos = _acomp[id].aditivos || {};
   _acomp[id].obsMetas = _acomp[id].obsMetas || {};
+  // Indicadores do Sig Cisterna (projetos com indicadoresSig): 1ª abertura usa seedSig do plano
+  if (PROJETOS[id].indicadoresSig && !_acomp[id].sig) _acomp[id].sig = { ...(PROJETOS[id].seedSig || {}) };
+}
+
+// ─── Indicadores do Sig Cisterna (lançados à mão a partir do Sig) ───
+function editSig(id, campo, val){
+  _acomp[id].sig = _acomp[id].sig || {};
+  if (campo !== 'atualizadoEm' && campo !== 'fonte') val = val === '' ? '' : (parseInt(String(val).replace(/\D/g,''),10) || 0);
+  _acomp[id].sig[campo] = val;
+  if (campo !== 'atualizadoEm' && campo !== 'fonte') _acomp[id].sig.atualizadoEm = new Date().toLocaleDateString('pt-BR');
+  salvarAcomp(id); refreshAcomp(id);
+}
+function renderIndicadoresSig(id, edit){
+  const p = PROJETOS[id]; if (!p.indicadoresSig) return '';
+  const sig = (_acomp[id] && _acomp[id].sig) || {};
+  const linhas = p.indicadoresSig.map(ind => {
+    const v = sig[ind.k];
+    const temV = v !== undefined && v !== '';
+    const perc = ind.meta && temV ? Math.min(100, Math.round(v / ind.meta * 100)) : null;
+    const campo = edit
+      ? `<input class="acomp-date" style="width:90px;text-align:right" inputmode="numeric" value="${temV?v:''}" placeholder="—" onchange="editSig('${id}','${ind.k}',this.value)">`
+      : `<b>${temV ? v.toLocaleString('pt-BR') : '—'}</b>`;
+    const barra = perc === null ? '' : `<div class="mini-prog" style="margin-top:4px"><i style="width:${perc}%"></i></div>`;
+    return `<tr><td>${ind.lbl}${barra}</td><td style="text-align:right">${campo}</td><td style="text-align:right">${ind.meta ? ind.meta.toLocaleString('pt-BR') : '—'}</td><td style="text-align:right">${perc === null ? '—' : perc + '%'}</td></tr>`;
+  }).join('');
+  const rodape = `Atualizado em ${sig.atualizadoEm || '—'}${sig.fonte ? ' · Fonte: ' + sig.fonte : ''}`;
+  return `<div class="card" style="margin-bottom:16px"><div class="card-title">Indicadores <span>Sig Cisterna</span></div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Indicador</th><th style="text-align:right">Realizado</th><th style="text-align:right">Meta</th><th style="text-align:right">%</th></tr></thead>
+      <tbody>${linhas}</tbody>
+    </table></div>
+    <p style="font-size:12px;color:var(--text3);margin-top:8px">${rodape}${edit ? ' · Lance aqui os números conferidos no Sig. Não registre CPF nem nomes.' : ''}</p>
+  </div>`;
 }
 
 // Cronograma: fixo do plano (Ceará) OU editável (cisternas etc.)
@@ -2440,7 +2524,8 @@ function renderAcompanhamento(id){
 
   const aviso = edit ? '' : `<div class="alert alert-info" style="margin-bottom:14px">👁️ Modo visualização. O registro da execução é feito pelo <b>responsável do projeto</b> (com a senha do projeto).</div>`;
 
-  return `${aviso}${kpis}${painel}${metaFisicaCard}
+  const sigCard = renderIndicadoresSig(id, edit);
+  return `${aviso}${kpis}${painel}${sigCard}${metaFisicaCard}
     <div class="card"><div class="card-title">Execução <span>Física — Metas &amp; Etapas</span></div>${metas}</div>
     <div class="card"><div class="card-title">Execução <span>Financeira — Parcelas</span></div>
       <div class="table-wrap"><table>
@@ -2581,8 +2666,15 @@ async function iniciarModoTecnico() {
 async function carregarBenefDoTecnico() {
   if (!currentUser) return;
   try {
-    const snap = await col('beneficiarios').where('tecnicoResponsavelId','==',currentUser.uid).get();
-    _benefTecnico = snap.docs.map(d => ({id:d.id, ...d.data()}));
+    // Busca os beneficiários do técnico: os marcados como dele (tecnicoResponsavelId)
+    // e também os que ele mesmo cadastrou antes dessa marcação existir (createdBy).
+    const [snapResp, snapCriados] = await Promise.all([
+      col('beneficiarios').where('tecnicoResponsavelId','==',currentUser.uid).get(),
+      col('beneficiarios').where('createdBy','==',currentUser.uid).get(),
+    ]);
+    const porId = {};
+    [...snapResp.docs, ...snapCriados.docs].forEach(d => { porId[d.id] = {id:d.id, ...d.data()}; });
+    _benefTecnico = Object.values(porId).sort((a,b) => (a.nome||'').localeCompare(b.nome||''));
   } catch(e) { console.error('benef técnico:', e); _benefTecnico = []; }
   renderBenefTecnico();
 }
@@ -3180,8 +3272,8 @@ async function iniciarApp() {
       carregarTecnicos().catch(e => { console.error('tecnicos:', e); _tecnicos = []; renderTecnicos(); }),
     ]);
     atualizarDashboard();
-    carregarBenef().catch(e => { console.error('benef:', e); _beneficiarios = []; renderBenef(); });
-    carregarExecucoes().catch(e => { console.error('execucoes:', e); _execucoes = []; renderExecucoes(); });
+    carregarBenef().catch(e => { console.error('benef:', e); _benef = []; renderBenef(); });
+    carregarExecucoes().catch(e => { console.error('execucoes:', e); _execucoes = []; renderExecucao(); });
     carregarRepasses().catch(e => console.error('repasses:', e));
     carregarUsuarios().catch(e => { console.error('usuarios:', e); _usuarios = []; renderUsuarios(); });
     preencherSelects();
@@ -3522,7 +3614,7 @@ function abrirModalBenef(id='') {
   preencherSelectProgramas('benef-programa');
   document.getElementById('benef-data').value = today();
   if (id) {
-    const b = _benef.find(x => x.id === id);
+    const b = _benef.find(x => x.id === id) || _benefTecnico.find(x => x.id === id);
     if (b) {
       document.getElementById('benef-nome').value=b.nome||'';
       document.getElementById('benef-cpf').value=b.cpf||'';
@@ -3551,7 +3643,7 @@ async function salvarBenef() {
   const mun = _municipios.find(m => m.id === municipioId);
   const prog = _programas.find(p => p.id === programaId);
   const status = document.getElementById('benef-status').value;
-  const existente = id ? _benef.find(b => b.id === id) : null;
+  const existente = id ? (_benef.find(b => b.id === id) || _benefTecnico.find(b => b.id === id)) : null;
   const data = {
     nome, cpf: document.getElementById('benef-cpf').value.trim(),
     telefone: document.getElementById('benef-tel').value.trim(),
@@ -3570,10 +3662,21 @@ async function salvarBenef() {
   };
   try {
     if (id) await col('beneficiarios').doc(id).update(data);
-    else await col('beneficiarios').add({...data, createdBy: currentUser.uid, createdAt: firebase.firestore.FieldValue.serverTimestamp()});
+    else {
+      const novo = {...data, createdBy: currentUser.uid, createdAt: firebase.firestore.FieldValue.serverTimestamp()};
+      // cadastro feito pelo técnico já fica ligado a ele (aparece em "Meus Beneficiários")
+      if (currentPerfil === 'tecnico') novo.tecnicoResponsavelId = currentUser.uid;
+      await col('beneficiarios').add(novo);
+    }
     fecharModal('modal-benef');
-    await carregarBenef();
-    atualizarDashboard();
+    if (currentPerfil === 'tecnico') {
+      await carregarBenefDoTecnico();
+      // se a ficha estava aberta, mostra os dados já atualizados
+      if (_fichaAtualId && document.getElementById('page-ficha-benef').classList.contains('active')) renderFichaBenef();
+    } else {
+      await carregarBenef();
+      atualizarDashboard();
+    }
   } catch(e) { alert('Erro: '+e.message); }
 }
 

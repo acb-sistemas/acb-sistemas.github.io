@@ -403,7 +403,7 @@ tbody tr:last-child td{border-bottom:none}
           <span class="nav-item-icon">👥</span> Usuários
         </div>
         <div class="nav-item" onclick="navigate('evolucao-area'); carregarEvolucaoArea();">
-          <span class="nav-item-icon">📈</span> Evolução por Área
+          <span class="nav-item-icon">📈</span> Evolução por Comunidade
         </div>
         <div class="nav-item" onclick="navigate('avaliar-tecnicos'); carregarAvaliacoesTecnicos();">
           <span class="nav-item-icon">✅</span> Avaliar Técnicos
@@ -3560,7 +3560,7 @@ function renderEvolucaoArea(){
   // agrupa por área (comunidade/município)
   const porArea = {};
   lista.forEach(b => {
-    const area = b.comunidade || b.municipioNome || 'Sem área definida';
+    const area = b.comunidade || b.municipioNome || 'Sem comunidade definida';
     if (!porArea[area]) porArea[area] = [];
     porArea[area].push(b);
   });
@@ -3568,7 +3568,7 @@ function renderEvolucaoArea(){
   const totalGeral = lista.length;
   const concluidosGeral = lista.filter(b => faseDe(b) === 'assinatura_termo').length;
   const kpis = `<div class="grid-4" style="margin-bottom:16px">
-    <div class="kpi"><div class="kpi-val">${areas.length}</div><div class="kpi-label">Áreas</div></div>
+    <div class="kpi"><div class="kpi-val">${areas.length}</div><div class="kpi-label">Comunidades</div></div>
     <div class="kpi" style="border-left-color:var(--blue)"><div class="kpi-val">${totalGeral}</div><div class="kpi-label">Beneficiários</div></div>
     <div class="kpi" style="border-left-color:var(--green2)"><div class="kpi-val">${concluidosGeral}</div><div class="kpi-label">Concluídos</div></div>
     <div class="kpi" style="border-left-color:var(--gold)"><div class="kpi-val">${totalGeral?Math.round(concluidosGeral/totalGeral*100):0}%</div><div class="kpi-label">Evolução Geral</div></div>
@@ -3624,7 +3624,7 @@ const PAGE_TITLES = {
   tecnicos:'Técnicos', usuarios:'Usuários',
   'meus-beneficiarios':'Meus Beneficiários', 'minha-agenda':'Minha Agenda',
   'ficha-benef':'Ficha do Beneficiário', 'questionario-marias':'Questionário Marias',
-  'minhas-avaliacoes':'Minhas Avaliações', 'evolucao-area':'Evolução por Área', 'avaliar-tecnicos':'Avaliar Técnicos'
+  'minhas-avaliacoes':'Minhas Avaliações', 'evolucao-area':'Evolução por Comunidade', 'avaliar-tecnicos':'Avaliar Técnicos'
 };
 function navigate(page) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));

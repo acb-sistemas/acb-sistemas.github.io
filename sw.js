@@ -1,4 +1,4 @@
-const CACHE = 'acb-v47';
+const CACHE = 'acb-v48';
 const CORE = ['/', '/index.html', '/manifest.json', '/logo-acb.png', '/Falcioni.jpg', '/icon-192.png', '/icon-512.png'];
 
 self.addEventListener('install', e => {

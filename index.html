@@ -2876,6 +2876,7 @@ auth.onAuthStateChanged(async user => {
     // ── Admin (e-mail/senha): sistema completo + todos os projetos ──
     currentUser = user;
     await carregarPerfilUsuario(user.uid, user.email);
+    if (currentPerfil === 'sem-perfil') return;
     document.getElementById('login-screen').classList.remove('show');
     document.getElementById('app').classList.add('show');
     if (currentPerfil === 'tecnico') {
@@ -2944,9 +2945,10 @@ async function carregarPerfilUsuario(uid, email) {
       document.getElementById('sidebar-user-name').textContent = d.nome || email;
       document.getElementById('sidebar-user-role').textContent = PERFIS[currentPerfil] || currentPerfil;
     } else {
-      document.getElementById('sidebar-user-name').textContent = email;
-      document.getElementById('sidebar-user-role').textContent = 'Usuário';
-      currentPerfil = 'admin'; // primeiro acesso = admin
+      // Sem cadastro em 'usuarios' = sem acesso (antes virava admin; corrigido em 26/11/2026).
+      currentPerfil = 'sem-perfil';
+      alert('Este e-mail não tem cadastro no Portal ACB. Peça a um administrador para cadastrar você em Usuários.');
+      await auth.signOut(); location.reload(); return;
     }
     document.getElementById('nav-admin').style.display = ['admin','geral','coordenador'].includes(currentPerfil) ? 'block' : 'none';
   } catch(e) { console.error(e); }
@@ -4458,7 +4460,10 @@ function renderUsuarios() {
 }
 function filtrarUsuarios(v) { _filtroUsr=v; renderUsuarios(); }
 
-function abrirModalUsuario() { abrirModal('modal-usuario'); }
+function abrirModalUsuario() {
+  if (!currentUser || currentPerfil !== 'admin') { alert('Só um administrador logado pode criar usuários.'); return; }
+  abrirModal('modal-usuario');
+}
 function editarUsuario(id) {
   const u = _usuarios.find(x => x.id === id);
   if (!u) return;
@@ -4481,9 +4486,17 @@ async function salvarUsuario() {
     if (id) {
       await col('usuarios').doc(id).update({ nome, perfil, updatedAt: firebase.firestore.FieldValue.serverTimestamp() });
     } else {
+      if (!currentUser || currentPerfil !== 'admin') { alert('Só um administrador logado pode criar usuários.'); return; }
       if (!senha || senha.length < 6) { alert('Senha mínimo 6 caracteres.'); return; }
-      const cred = await auth.createUserWithEmailAndPassword(email, senha);
-      await col('usuarios').doc(cred.user.uid).set({ nome, email, perfil, ativo: true, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
+      // Padrão da ACB: e-mail institucional. Outro domínio só como provisório, com confirmação.
+      if (!/@acbcrato\.org\.br$/i.test(email) && !confirm('Este e-mail não é institucional (@acbcrato.org.br).\n\nO padrão da ACB é usar o e-mail institucional. Criar mesmo assim, como provisório?')) return;
+      // Cria o login num app secundário para o administrador continuar logado (antes a sessão trocava para o usuário novo).
+      const app2 = firebase.apps.find(x => x.name === 'criar-usuario') || firebase.initializeApp(firebase.app().options, 'criar-usuario');
+      const cred = await app2.auth().createUserWithEmailAndPassword(email, senha);
+      // Grava o perfil com a sessão do próprio usuário novo (mesma permissão que o portal já usava).
+      await app2.firestore().collection('usuarios').doc(cred.user.uid).set({ nome, email, perfil, ativo: true, createdAt: firebase.firestore.FieldValue.serverTimestamp(), criadoPor: currentUser.email || currentUser.uid });
+      await app2.auth().signOut();
+      alert('Usuário criado. Passe para a pessoa o e-mail e a senha inicial; ela entra em "Sou Técnico ou Administrador".');
     }
     fecharModal('modal-usuario');
     await carregarUsuarios();

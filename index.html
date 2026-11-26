@@ -4500,6 +4500,11 @@ async function salvarUsuario() {
       // Grava o perfil com a sessão do próprio usuário novo (mesma permissão que o portal já usava).
       await app2.firestore().collection('usuarios').doc(cred.user.uid).set({ nome, email, perfil, ativo: true, createdAt: firebase.firestore.FieldValue.serverTimestamp(), criadoPor: currentUser.email || currentUser.uid });
       await app2.auth().signOut();
+      // Técnico de campo também entra no cadastro de Técnicos (mesmo id do login), para aparecer em Avaliações e nos selects.
+      if (perfil === 'tecnico') {
+        try { await col('tecnicos').doc(cred.user.uid).set({ nome, email, cargo: 'Técnico de campo', telefone: '', cpf: '', status: 'ativo', usuarioId: cred.user.uid, createdAt: firebase.firestore.FieldValue.serverTimestamp(), updatedAt: firebase.firestore.FieldValue.serverTimestamp() }, { merge: true }); await carregarTecnicos(); preencherSelects(); }
+        catch(e) { console.error('tecnicos:', e); alert('O login foi criado, mas não consegui incluir no cadastro de Técnicos. Cadastre em Técnicos > Novo.'); }
+      }
       alert('Usuário criado. Passe para a pessoa o e-mail e a senha inicial; ela entra em "Sou Técnico ou Administrador".');
     }
     fecharModal('modal-usuario');

@@ -3601,8 +3601,12 @@ async function iniciarApp() {
       carregarTecnicos().catch(e => { console.error('tecnicos:', e); _tecnicos = []; renderTecnicos(); }),
     ]);
     atualizarDashboard();
-    carregarBenef().catch(e => { console.error('benef:', e); _benef = []; renderBenef(); });
-    carregarExecucoes().catch(e => { console.error('execucoes:', e); _execucoes = []; renderExecucao(); });
+    // O painel é redesenhado quando beneficiários e execuções terminam de carregar
+    // (antes ficava com "0 benef." porque era montado antes da lista chegar; corrigido em 26/11/2026).
+    Promise.all([
+      carregarBenef().catch(e => { console.error('benef:', e); _benef = []; renderBenef(); }),
+      carregarExecucoes().catch(e => { console.error('execucoes:', e); _execucoes = []; renderExecucao(); }),
+    ]).then(() => { try { atualizarDashboard(); } catch(e) { console.error('dashboard:', e); } });
     carregarRepasses().catch(e => console.error('repasses:', e));
     carregarUsuarios().catch(e => { console.error('usuarios:', e); _usuarios = []; renderUsuarios(); });
     preencherSelects();
